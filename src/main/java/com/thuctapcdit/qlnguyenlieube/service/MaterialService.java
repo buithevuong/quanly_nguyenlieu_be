@@ -1,5 +1,10 @@
 package com.thuctapcdit.qlnguyenlieube.service;
 
-public interface MaterialService {
+import java.util.List;
 
+import com.thuctapcdit.qlnguyenlieube.dto.MaterialDto;
+
+public interface MaterialService {
+	
+	List<MaterialDto> getMaterials(Integer page , Integer size);
 }
