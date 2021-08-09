@@ -30,15 +30,15 @@ public class Alert {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name = "Title")
+	@Column(name = "title")
 	private String title;
 	
-	@Column(name = "Content")
+	@Column(name = "content")
 	private String content;
 	
-	@Column(name = "Color")
+	@Column(name = "color")
 	private String color;
 	
-	@Column(name = "CreatedAt")
+	@Column(name = "created_at")
 	private Date createdAt;
 }

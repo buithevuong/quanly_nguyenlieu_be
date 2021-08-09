@@ -21,7 +21,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "warningthreshold")
+@Table(name = "warning_threshold")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -33,19 +33,19 @@ public class WarningThreshold {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name = "Name")
+	@Column(name = "name")
 	private String name;
 	
-	@Column(name = "Threshold")
+	@Column(name = "thresh_hold")
 	private Float threshold;
 	
-	@Column(name = "Color")
+	@Column(name = "color")
 	private String color;
 	
-	@Column(name = "CreatedAt")
+	@Column(name = "created_at")
 	private Date createdAt;
 	
-	@Column(name = "UpdatedAt")
+	@Column(name = "updated_at")
 	private Date updatedAt;
 	
 	@OneToMany(mappedBy="warningThreshold", fetch = FetchType.LAZY)

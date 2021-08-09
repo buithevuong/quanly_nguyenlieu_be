@@ -1,19 +1,17 @@
 package com.thuctapcdit.qlnguyenlieube.model;
 
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,7 +24,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@JsonInclude(Include.NON_NULL)
+//@JsonInclude(Include.NON_NULL)
 public class Material {
 
 	@Id
@@ -34,33 +32,37 @@ public class Material {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "Name")
+	@Column(name = "name")
 	private String name;
 
-	@Column(name = "Image")
+	@Column(name = "image")
 	private String image;
 
-	@Column(name = "currentAmount")
+	@Column(name = "current_amount")
 	private Float currentAmount;
 
-	@Column(name = "total")
+	@Column(name = "total_amount")
 	private Float total;
 
-	@Column(name = "Status")
+	@Column(name = "status")
 	private Integer status;
 
-	@Column(name = "CreatedAt")
+	@Column(name = "created_at")
 	private Date createdAt;
 
-	@Column(name = "UpdatedAt")
+	@Column(name = "updated_at")
 	private Date updatedAt;
 	
-    @OneToMany(mappedBy="material", fetch = FetchType.LAZY)
-    private Set<MaterialSupplier> materialSuppliers;
+    @OneToMany(mappedBy="material")
+    private List<MaterialSupplier> materialSuppliers;
 
-    @OneToMany(mappedBy="material", fetch = FetchType.LAZY)
-    private Set<MaterialWarning> materialWarnings;
+    @OneToMany(mappedBy="material")
+    private List<MaterialWarning> materialWarnings;
     
-    @OneToMany(mappedBy="material", fetch = FetchType.LAZY)
-    private Set<ProductMaterial> productMaterials;
+    @OneToMany(mappedBy="material")
+    private List<ProductMaterial> productMaterials;
+    
+    @OneToOne
+	@JoinColumn(name="user_id")
+	private User user;
 }

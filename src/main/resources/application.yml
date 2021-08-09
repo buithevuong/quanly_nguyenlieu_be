@@ -15,11 +15,12 @@ file:
 database:
    datasource:
       url: jdbc:mysql://localhost:3306/quanly_nguyenlieu?useUnicode=yes&characterEncoding=UTF-8
-      driverClassName: com.mysql.jdbc.Driver
+      driverClassName: com.mysql.cj.jdbc.Driver
       username: root
       password: buithevuong
    jpa:
       hibernate.ddl-auto: update
       generate-ddl: true
       show-sql: true
+      properties.hibernate.dialect: org.hibernate.dialect.MySQLDialect
 

@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,7 +21,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "materialsupplier")
+@Table(name = "material_supplier")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -33,15 +34,15 @@ public class MaterialSupplier {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@ManyToOne(optional=false)
-    @JoinColumn(name="MaterialId", nullable=false)
+	@ManyToOne(optional=false , fetch = FetchType.LAZY)
+    @JoinColumn(name="material_id", nullable=false)
 	private Material material;
 	
-	@ManyToOne(optional=false)
-    @JoinColumn(name="SupplierId", nullable=false)
+	@ManyToOne(optional=false, fetch = FetchType.LAZY)
+    @JoinColumn(name="supplier_id", nullable=false)
 	private Supplier supplier;
 	
-	@Column(name = "amountMaterial")
+	@Column(name = "amount_material")
 	private Float amountMaterial;
 
 	

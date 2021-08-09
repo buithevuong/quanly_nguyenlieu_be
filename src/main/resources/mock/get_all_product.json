@@ -1,0 +1,49 @@
+{
+	"data": [
+				{
+				
+					"Id":123,
+					"Name": "Name1",
+					"Image": "image.jpg",
+					"Amount" : 1,
+					"status" : 1,
+					"CreatedAt" : "2038-01-19 03:14:07",
+					"UpdatedAt":"2038-01-19 03:14:07",
+					"materials": [
+									{
+										"Id": 123,
+										"Name":"Material 1",
+										"amountMaterial" : 1111							
+									},
+									{
+										"Id": 123,
+										"Name":"Material 1",
+										"amountMaterial" : 1111							
+									}
+								]
+					
+				},
+				{
+				
+					"Id":123,
+					"Name": "Name1",
+					"Image": "image.jpg",
+					"Amount" : 1,
+					"CreatedAt" : "2038-01-19 03:14:07",
+					"UpdatedAt":"2038-01-19 03:14:07",
+					"materials": [
+									{
+										"Id": 123,
+										"Name":"Material 1",
+										"amountMaterial" : 1111							
+									},
+									{
+										"Id": 123,
+										"Name":"Material 1",
+										"amountMaterial" : 1111							
+									}
+								]
+					
+				}
+			]
+}

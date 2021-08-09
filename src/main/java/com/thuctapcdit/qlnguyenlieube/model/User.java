@@ -32,36 +32,37 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name = "Name")
+	@Column(name = "name")
 	private String name;
 
-	@Column(name = "Gender")
+	@Column(name = "gender")
 	private String gender;
 	
-	@Column(name = "Birth")
+	@Column(name = "birth")
 	private LocalDate birth;
 	
-	@Column(name = "Phone")
+	@Column(name = "phone")
 	private String phone;
 	
-	@Column(name = "Email")
+	@Column(name = "email")
 	private String email;
 	
-	@Column(name = "Status")
+	@Column(name = "status")
 	private Integer status;
 	
-	@Column(name = "Pasword")
+	@Column(name = "password")
 	private String password;
 	
-	@Column(name = "Token")
+	@Column(name = "token")
 	private String token;
 	
-	@Column(name = "TokenExpired")
+	@Column(name = "token_expired")
 	private Date tokenExpired;
 	
-	@Column(name = "CreatedAt")
+	@Column(name = "created_at")
 	private Date createdAt;
 
-	@Column(name = "UpdatedAt")
+	@Column(name = "updated_at")
 	private Date updatedAt;
+	
 }
