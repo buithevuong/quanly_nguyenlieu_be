@@ -3,15 +3,7 @@ package com.thuctapcdit.qlnguyenlieube.model;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -27,7 +19,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@JsonInclude(Include.NON_NULL)
 public class Supplier {
 	@Id
 	@Column(name = "id")
@@ -58,7 +49,7 @@ public class Supplier {
 	@Column(name = "updated_at")
 	private Date updatedAt;
 	
-	@OneToMany(mappedBy="supplier")
+	@OneToMany(mappedBy="supplier" , fetch = FetchType.LAZY)
     private List<MaterialSupplier> materialSuppliers;
 	
 	@OneToOne

@@ -1,20 +1,21 @@
-<!-- <?xml version="1.0" encoding="UTF-8"?>
-<Configuration>
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="trace">
+
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{yyyy-MMM-dd HH:mm:ss} [%t] %-5level %-50c{1.} - %msg%n"/>
+            <PatternLayout pattern="%d{YYYY-MM-dd HH:mm:ss} [%t] %-5p %c{1}:%L - %msg%n" />
         </Console>
-        <File name="File" fileName="spring.log">
-            <PatternLayout
-                    pattern="%d{yyyy-MMM-dd HH:mm:ss} [%t] %-5level %-50c{1.} - %msg%n"/>
-        </File>
-    </Appenders>
 
+    </Appenders>
     <Loggers>
+
         <Root level="info">
-            <AppenderRef ref="Console"/>
-            <AppenderRef ref="File"/>
+            <AppenderRef ref="quanly_nguyenlieu_INFO" />
+            <AppenderRef ref="quanly_nguyenlieu_ERROR" />
+            <AppenderRef ref="Console" />
+
         </Root>
+        <!-- <logger name="org.springframework" level="DEBUG" />  -->
     </Loggers>
 </Configuration>
- -->
+

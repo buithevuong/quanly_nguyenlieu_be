@@ -12,6 +12,9 @@ spring:
 file:
    upload-dir: ./files
 
+logging:
+  .file: ./spring.log
+
 database:
    datasource:
       url: jdbc:mysql://localhost:3306/quanly_nguyenlieu?useUnicode=yes&characterEncoding=UTF-8

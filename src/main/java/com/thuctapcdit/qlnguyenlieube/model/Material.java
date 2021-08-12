@@ -3,20 +3,15 @@ package com.thuctapcdit.qlnguyenlieube.model;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "material")
@@ -24,6 +19,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@EntityListeners(AuditingEntityListener.class)
 //@JsonInclude(Include.NON_NULL)
 public class Material {
 
@@ -34,6 +30,9 @@ public class Material {
 
 	@Column(name = "name")
 	private String name;
+
+	@Column(name = "type")
+	private String type;
 
 	@Column(name = "image")
 	private String image;
@@ -47,9 +46,11 @@ public class Material {
 	@Column(name = "status")
 	private Integer status;
 
+	@CreatedDate
 	@Column(name = "created_at")
 	private Date createdAt;
 
+	@LastModifiedDate
 	@Column(name = "updated_at")
 	private Date updatedAt;
 	
