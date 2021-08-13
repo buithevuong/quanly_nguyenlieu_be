@@ -12,6 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+
 @RestController
 @RequestMapping("v1/material")
 @CrossOrigin(origins = "http://localhost:3000/")
@@ -23,15 +27,15 @@ public class MaterialController {
     private MaterialService materialService;
 
     @GetMapping("")
-    public ResponseEntity<?> getMaterials(@RequestParam("page") Integer page,
-                                          @RequestParam("size") Integer size) {
+    public ResponseEntity<?> getMaterials(@RequestParam("page") @Min(0) Integer page,
+                                          @RequestParam("size") @Min(1) @Max(10) Integer size) {
 
         return ResponseEntity.ok().body(materialService.getMaterials(page, size));
     }
 
     @GetMapping("/search")
-    public ResponseEntity<?> getMaterialsByName(@RequestParam("page") Integer page,
-                                                @RequestParam("size") Integer size,
+    public ResponseEntity<?> getMaterialsByName(@RequestParam("page") @Min(0) Integer page,
+                                                @RequestParam("size") @Min(1) @Max(10) Integer size,
                                                 @RequestParam("name") String name,
                                                 @RequestParam("type") String type) {
 
@@ -41,14 +45,14 @@ public class MaterialController {
     }
 
     @PostMapping( value = "")
-    public ResponseEntity<?> addMaterial(@ModelAttribute MaterialDto materialDto ) throws JsonProcessingException {
+    public ResponseEntity<?> addMaterial(@ModelAttribute @Valid MaterialDto materialDto ) throws JsonProcessingException {
 
         System.out.println(materialDto);
         return ResponseEntity.ok().body(materialService.createMaterial(materialDto));
     }
 
     @PutMapping(value = "")
-    public ResponseEntity<?> editMaterial(@ModelAttribute MaterialDto materialDto) throws JsonProcessingException {
+    public ResponseEntity<?> editMaterial(@ModelAttribute @Valid MaterialDto materialDto) throws JsonProcessingException {
 
         System.out.println(materialDto);
         return ResponseEntity.ok().body(materialService.editMaterial(materialDto));

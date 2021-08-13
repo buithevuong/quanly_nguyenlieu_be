@@ -2,8 +2,12 @@ package com.thuctapcdit.qlnguyenlieube.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.thuctapcdit.qlnguyenlieube.dao.SupplierRepository;
+import com.thuctapcdit.qlnguyenlieube.dao.UserRepo;
+import com.thuctapcdit.qlnguyenlieube.dto.ProductDto;
 import com.thuctapcdit.qlnguyenlieube.dto.SupplierDto;
+import com.thuctapcdit.qlnguyenlieube.exception.NotFoundException;
 import com.thuctapcdit.qlnguyenlieube.model.Material;
+import com.thuctapcdit.qlnguyenlieube.model.Product;
 import com.thuctapcdit.qlnguyenlieube.model.Supplier;
 import com.thuctapcdit.qlnguyenlieube.service.SupplierService;
 import org.modelmapper.ModelMapper;
@@ -24,6 +28,9 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private UserRepo userRepo;
 
     @Override
     public List<SupplierDto> getSupplier(Integer page, Integer size) {
@@ -51,16 +58,34 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public SupplierDto createSupplier(SupplierDto supplierDto) throws JsonProcessingException {
-        return null;
+        Supplier supplier = modelMapper.map(supplierDto , Supplier.class);
+
+        return modelMapper.map(supplierRepo.save(supplier) , SupplierDto.class);
     }
 
     @Override
     public SupplierDto editSupplier(SupplierDto supplierDto) throws JsonProcessingException {
-        return null;
+        Supplier supplier = supplierRepo.findById(supplierDto.getId()).orElseThrow(()-> {
+            throw new NotFoundException("Not found Supplier");
+        });
+
+        supplier.setName(supplierDto.getName());
+        supplier.setAddress(supplierDto.getAddress());
+        supplier.setEmail(supplierDto.getEmail());
+        supplier.setUser(userRepo.findById(1L).get());
+        supplier.setStatus(supplierDto.getStatus());
+        supplier.setPhone(supplierDto.getPhone());
+
+        return modelMapper.map(supplierRepo.save(supplier) , SupplierDto.class);
     }
 
     @Override
     public SupplierDto removeSupplier(Long id) {
-        return null;
+        Supplier supplier = supplierRepo.findById(id).orElseThrow(() -> {
+                    throw new NotFoundException("Not found Supplier By Id");
+                }
+        );
+        supplier.setStatus(0);
+        return modelMapper.map(supplierRepo.save(supplier), SupplierDto.class);
     }
 }

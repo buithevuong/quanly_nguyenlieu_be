@@ -8,6 +8,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.constraints.NotBlank;
 
 @Data
 @AllArgsConstructor
@@ -18,12 +21,13 @@ public class ProductDto {
 
 	private Long id;
 
-	
+	@NotBlank
 	private String name;
 
 
 	private String image;
 
+	private MultipartFile file;
 	
 	private Float amount;
 
@@ -36,4 +40,6 @@ public class ProductDto {
 	private Date updatedAt;
 
 	private List<Map<String,Object>> materials;
+
+	private String materialsJSON;
 }
