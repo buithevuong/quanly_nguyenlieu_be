@@ -53,7 +53,7 @@ public class Product {
 	@Column(name = "updated_at")
 	private Date updatedAt;
 	
-	@OneToMany(mappedBy="product" , cascade = CascadeType.DETACH)
+	@OneToMany(mappedBy="product")
     private List<ProductMaterial> productMaterials;
 	
 	@OneToOne

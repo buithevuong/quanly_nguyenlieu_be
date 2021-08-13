@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -20,6 +21,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @NoArgsConstructor
 @Builder
 @EntityListeners(AuditingEntityListener.class)
+@Slf4j
 //@JsonInclude(Include.NON_NULL)
 public class Material {
 
@@ -62,7 +64,10 @@ public class Material {
     
     @OneToMany(mappedBy="material")
     private List<ProductMaterial> productMaterials;
-    
+
+	@OneToMany(mappedBy="material")
+	private List<Alert> alerts;
+
     @OneToOne
 	@JoinColumn(name="user_id")
 	private User user;

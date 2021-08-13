@@ -1,21 +1,21 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="trace">
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<!--<Configuration status="trace">-->
 
-    <Appenders>
-        <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{YYYY-MM-dd HH:mm:ss} [%t] %-5p %c{1}:%L - %msg%n" />
-        </Console>
+<!--    <Appenders>-->
+<!--        <Console name="Console" target="SYSTEM_OUT">-->
+<!--            <PatternLayout pattern="%d{YYYY-MM-dd HH:mm:ss} [%t] %-5p %c{1}:%L - %msg%n" />-->
+<!--        </Console>-->
 
-    </Appenders>
-    <Loggers>
+<!--    </Appenders>-->
+<!--    <Loggers>-->
 
-        <Root level="info">
-            <AppenderRef ref="quanly_nguyenlieu_INFO" />
-            <AppenderRef ref="quanly_nguyenlieu_ERROR" />
-            <AppenderRef ref="Console" />
+<!--        <Root level="info">-->
+<!--            <AppenderRef ref="quanly_nguyenlieu_INFO" />-->
+<!--            <AppenderRef ref="quanly_nguyenlieu_ERROR" />-->
+<!--            <AppenderRef ref="Console" />-->
 
-        </Root>
-        <!-- <logger name="org.springframework" level="DEBUG" />  -->
-    </Loggers>
-</Configuration>
+<!--        </Root>-->
+<!--        &lt;!&ndash; <logger name="org.springframework" level="DEBUG" />  &ndash;&gt;-->
+<!--    </Loggers>-->
+<!--</Configuration>-->
 

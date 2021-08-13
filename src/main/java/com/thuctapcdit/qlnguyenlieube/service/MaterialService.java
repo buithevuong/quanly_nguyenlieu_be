@@ -15,5 +15,7 @@ public interface MaterialService {
 
 	MaterialDto createMaterial(MaterialDto materialDto ) throws JsonProcessingException;
 
+	MaterialDto editMaterial(MaterialDto materialDto ) throws JsonProcessingException;
+
 	MaterialDto removeMaterial(Long id);
 }

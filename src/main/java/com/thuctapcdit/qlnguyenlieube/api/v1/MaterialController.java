@@ -14,16 +14,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("v1/material")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:3000/")
 public class MaterialController {
 
     private static final Logger logger = LogManager.getLogger(MaterialController.class);
 
     @Autowired
     private MaterialService materialService;
-
-    @Autowired
-    private SupplierRepository sr;
 
     @GetMapping("")
     public ResponseEntity<?> getMaterials(@RequestParam("page") Integer page,
@@ -38,7 +35,7 @@ public class MaterialController {
                                                 @RequestParam("name") String name,
                                                 @RequestParam("type") String type) {
 
-        logger.info("request search by name: {}", name);
+        logger.info("request search by name: {} and type: {}", name , type);
 
         return ResponseEntity.ok().body(materialService.getMaterialsByName(page, size, name, type));
     }
@@ -48,6 +45,13 @@ public class MaterialController {
 
         System.out.println(materialDto);
         return ResponseEntity.ok().body(materialService.createMaterial(materialDto));
+    }
+
+    @PutMapping(value = "")
+    public ResponseEntity<?> editMaterial(@ModelAttribute MaterialDto materialDto) throws JsonProcessingException {
+
+        System.out.println(materialDto);
+        return ResponseEntity.ok().body(materialService.editMaterial(materialDto));
     }
 
     @PutMapping("/remove")

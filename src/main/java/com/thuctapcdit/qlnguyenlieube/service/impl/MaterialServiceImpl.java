@@ -91,12 +91,17 @@ public class MaterialServiceImpl implements MaterialService {
             listSupDto.add((Map<String, Object>) item);
         });
 
-            String nameSup = (String) listSupDto.get(0).get("nameSupplier");
+
 
             Material response = materialRepo.save(material);
 
             if(response != null){
-                list.forEach(i -> {
+                listSupDto.forEach(i -> {
+
+                    String nameSup = (String) i.get("name");
+                    Float amountMa = Float.parseFloat((String) i.get("amountMaterial")) ;
+
+
                     Supplier s = supplierRepo.findByName(nameSup).orElseThrow(()-> {
                                 throw new NotFoundException("Not found supplier");
                             }
@@ -105,7 +110,7 @@ public class MaterialServiceImpl implements MaterialService {
                     MaterialSupplier ms = MaterialSupplier.builder()
                             .supplier(s)
                             .material(response)
-                            .amountMaterial(1F)
+                            .amountMaterial(amountMa)
                             .build();
                     msRepo.save(ms);
 
@@ -114,6 +119,70 @@ public class MaterialServiceImpl implements MaterialService {
 
             return modelMapper.map(response , MaterialDto.class);
 
+    }
+
+    @Override
+    public MaterialDto editMaterial(MaterialDto materialDto) throws JsonProcessingException {
+        List list = objectMapper.readValue(materialDto.getSuppliersJSON() , List.class);
+
+        Material material = materialRepo.findById(materialDto.getId()).orElseThrow(()-> {
+            throw new NotFoundException("Not fount Material By Id :" + materialDto.getId());
+        });
+
+        material.setName(materialDto.getName());
+        material.setType(materialDto.getType());
+        material.setTotal(materialDto.getTotal());
+        material.setCurrentAmount(material.getTotal() - materialDto.getTotal() + material.getCurrentAmount());
+
+        if(materialDto.getFile()!= null){
+            String fileName = fileStorageService.storeFile(materialDto.getFile() , false);
+            material.setImage(fileName);
+        }
+
+        User user = userRepo.getById((long) 1);
+        material.setUser(user);
+
+        List<Map<String , Object>> listSupDto = new ArrayList<>();
+
+        list.forEach(item -> {
+            listSupDto.add((Map<String, Object>) item);
+        });
+
+
+
+        Material response = materialRepo.save(material);
+
+        if(response != null){
+            listSupDto.forEach(i -> {
+
+                String nameSup = (String) i.get("name");
+                Float amountMa = Float.parseFloat(String.valueOf(i.get("amountMaterial"))) ;
+
+
+
+                Supplier s = supplierRepo.findByName(nameSup).orElseThrow(()-> {
+                            throw new NotFoundException("Not found supplier");
+                        }
+                );
+
+                MaterialSupplier checkMs = msRepo.findByMaterialAndSupplier(response , s);
+
+                if(checkMs == null){
+                    MaterialSupplier ms = MaterialSupplier.builder()
+                            .supplier(s)
+                            .material(response)
+                            .amountMaterial(amountMa)
+                            .build();
+                    msRepo.save(ms);
+                } else {
+                    checkMs.setAmountMaterial(amountMa);
+                    msRepo.save(checkMs);
+                }
+
+            });
+        }
+
+        return modelMapper.map(response , MaterialDto.class);
     }
 
     @Override

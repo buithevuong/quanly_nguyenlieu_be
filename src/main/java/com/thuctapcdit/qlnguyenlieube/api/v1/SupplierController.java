@@ -19,4 +19,16 @@ public class SupplierController {
 
         return ResponseEntity.ok().body(supplierService.getSupplier(page , size));
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> getMaterialsByName(@RequestParam("page") Integer page,
+                                                @RequestParam("size") Integer size,
+                                                @RequestParam("name") String name,
+                                                @RequestParam("phone") String phone,
+                                                @RequestParam("email") String email) {
+
+
+
+        return ResponseEntity.ok().body(supplierService.searchSupplier(page, size, name, phone , email));
+    }
 }

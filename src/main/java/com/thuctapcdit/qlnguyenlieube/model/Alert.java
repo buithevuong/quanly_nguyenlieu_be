@@ -2,12 +2,7 @@ package com.thuctapcdit.qlnguyenlieube.model;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -41,4 +36,11 @@ public class Alert {
 	
 	@Column(name = "created_at")
 	private Date createdAt;
+
+	@Column(name = "is_checked")
+	private Integer isChecked;
+
+	@ManyToOne(optional=false , fetch = FetchType.LAZY)
+	@JoinColumn(name="material_id", nullable=false)
+	private Material material;
 }

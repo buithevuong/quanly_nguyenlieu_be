@@ -11,10 +11,10 @@ import com.thuctapcdit.qlnguyenlieube.dto.ExceptionResponse;
 @RestControllerAdvice
 public class RestExceptionHandler {
 
-	@ExceptionHandler(Exception.class)
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ResponseEntity<?> handlerException(Exception ex){
-        return ResponseEntity.ok(ExceptionResponse.responseFail(ex.getMessage(),HttpStatus.BAD_REQUEST.value()));
-    }
+//	@ExceptionHandler(Exception.class)
+//    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+//    public ResponseEntity<?> handlerException(Exception ex){
+//        return ResponseEntity.ok(ExceptionResponse.responseFail(ex.getMessage(),HttpStatus.BAD_REQUEST.value()));
+//    }
 
 }
