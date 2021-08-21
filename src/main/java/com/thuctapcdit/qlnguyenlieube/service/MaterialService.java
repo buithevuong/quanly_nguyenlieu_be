@@ -11,7 +11,7 @@ public interface MaterialService {
 	
 	List<MaterialDto> getMaterials(Integer page , Integer size);
 
-	List<MaterialDto> getMaterialsByName(Integer page , Integer size , String name , String type);
+	List<MaterialDto> getMaterialsByName(Integer page , Integer size , String name , String type ,Integer status);
 
 	MaterialDto createMaterial(MaterialDto materialDto ) throws JsonProcessingException;
 

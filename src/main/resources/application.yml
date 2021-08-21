@@ -10,7 +10,7 @@ spring:
          max-request-size: 215MB
 
 file:
-   upload-dir: ./files
+   upload-dir: .\files
 
 logging:
   .file: ./spring.log

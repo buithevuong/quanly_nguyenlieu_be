@@ -2,15 +2,7 @@ package com.thuctapcdit.qlnguyenlieube.model;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -19,6 +11,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "material_warning")
@@ -27,6 +21,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @JsonInclude(Include.NON_NULL)
+@EntityListeners(AuditingEntityListener.class)
 public class MaterialWarning {
 	@Id
 	@Column(name = "id")
@@ -40,7 +35,8 @@ public class MaterialWarning {
 	@ManyToOne(optional=false, fetch = FetchType.LAZY)
     @JoinColumn(name="warning_threshold_id", nullable=false)
 	private WarningThreshold warningThreshold;
-	
+
+	@CreatedDate
 	@Column(name = "created_at")
 	private Date createdAt;
 }

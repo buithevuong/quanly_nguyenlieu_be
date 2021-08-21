@@ -1,8 +1,11 @@
 package com.thuctapcdit.qlnguyenlieube.service.impl;
 
 import com.thuctapcdit.qlnguyenlieube.dao.AlertRepository;
+import com.thuctapcdit.qlnguyenlieube.dao.MaterialWarningRepo;
 import com.thuctapcdit.qlnguyenlieube.dto.AlertDto;
 import com.thuctapcdit.qlnguyenlieube.model.Alert;
+import com.thuctapcdit.qlnguyenlieube.model.Material;
+import com.thuctapcdit.qlnguyenlieube.model.MaterialWarning;
 import com.thuctapcdit.qlnguyenlieube.service.AlertService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +34,14 @@ public class AlertServiceImpl implements AlertService {
     @Autowired
     private JavaMailSender emailSender;
 
+    @Autowired
+    private MaterialWarningRepo mwRepo;
 
     @Override
     public Map<String , Object> getAllAlert(Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page , size);
 
-        Page<Alert> list =  alertRepository.findAll(pageable);
+        Page<Alert> list =  alertRepository.findAllByOrderByCreatedAtDesc(pageable);
 
         List<AlertDto> dtos =  list.stream().map(a -> {
             AlertDto dto = modelMapper.map(a , AlertDto.class);
@@ -51,16 +56,37 @@ public class AlertServiceImpl implements AlertService {
         map.put("totalNotCheck" , countNotCheck);
         return map;
     }
-
-    private void sendEmailNoti(String email , AlertDto alertDto){
+    @Override
+    public void sendEmailAndNoti(String email , Material material){
         try {
             SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+            List<MaterialWarning> listMw = mwRepo.findByMaterial(material);
 
-            simpleMailMessage.setTo(email);
-            simpleMailMessage.setSubject(alertDto.getTitle());
-            simpleMailMessage.setText(alertDto.getContent());
+            float tile = (material.getCurrentAmount()/material.getTotal())*100;
+            listMw.forEach(i -> {
+                if(tile < i.getWarningThreshold().getThreshold() ){
 
-            emailSender.send(simpleMailMessage);
+                    Alert alert = Alert.builder()
+                            .material(material)
+                            .title("Cảnh báo mức lượng nguyên liệu còn lại")
+                            .content("Lượng nguyên liệu còn lại là "+tile + "%")
+                            .color("red")
+                            .isChecked(1)
+                            .build();
+
+                    alertRepository.save(alert);
+
+                    simpleMailMessage.setTo(email);
+                    simpleMailMessage.setSubject(alert.getTitle());
+                    simpleMailMessage.setText(alert.getContent());
+
+                    emailSender.send(simpleMailMessage);
+
+                    System.out.println("Email sended to "+ email + " : "+alert.getContent());
+                }
+            });
+
+
         } catch (Exception ex) {
             throw new InvalidParameterException(ex.getMessage());
         }

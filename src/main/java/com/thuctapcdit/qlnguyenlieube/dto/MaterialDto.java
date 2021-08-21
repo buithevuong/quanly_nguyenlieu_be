@@ -1,14 +1,18 @@
 package com.thuctapcdit.qlnguyenlieube.dto;
 
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.thuctapcdit.qlnguyenlieube.model.WarningThreshold;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
@@ -31,7 +35,7 @@ public class MaterialDto {
 
 	private MultipartFile file;
 
-	private MultipartFile imageFile;
+	private InputStreamResource fileResponse;
 
 	private Float currentAmount;
 
@@ -44,6 +48,10 @@ public class MaterialDto {
 	private Date updatedAt;
 	
 	private List<Map<String,Object>> suppliers;
+
+	private List<WarningThresholdDto> wtDtos;
+
+	private String wthsJSON;
 
 	private String suppliersJSON;
 

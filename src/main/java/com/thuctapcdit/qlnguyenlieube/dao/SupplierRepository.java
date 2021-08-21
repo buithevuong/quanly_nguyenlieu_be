@@ -12,5 +12,7 @@ public interface SupplierRepository extends JpaRepository<Supplier, Long> {
 
     Optional<Supplier> findByName(String name);
 
-    Page<Supplier> findByNameLikeAndPhoneLikeAndEmailLike(String name , String phone ,String email, Pageable pageable);
+    Page<Supplier> findByNameLikeAndPhoneLikeAndEmailLikeOrderByUpdatedAtDesc(String name , String phone ,String email, Pageable pageable);
+
+    Page<Supplier> findByNameLikeAndPhoneLikeAndEmailLikeAndStatusOrderByUpdatedAtDesc(String name , String phone ,String email, Integer status, Pageable pageable);
 }

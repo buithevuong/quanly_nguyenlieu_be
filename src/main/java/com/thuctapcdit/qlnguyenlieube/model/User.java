@@ -3,12 +3,7 @@ package com.thuctapcdit.qlnguyenlieube.model;
 import java.time.LocalDate;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -17,6 +12,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "user")
@@ -25,6 +23,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @JsonInclude(Include.NON_NULL)
+@EntityListeners(AuditingEntityListener.class)
 public class User {
 
 	@Id
@@ -58,10 +57,12 @@ public class User {
 	
 	@Column(name = "token_expired")
 	private Date tokenExpired;
-	
+
+	@CreatedDate
 	@Column(name = "created_at")
 	private Date createdAt;
 
+	@LastModifiedDate
 	@Column(name = "updated_at")
 	private Date updatedAt;
 	

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("v1/alert")
-@CrossOrigin(origins = "http://localhost:3000/")
+@CrossOrigin("*")
 public class AlertController {
 
     @Autowired

@@ -13,6 +13,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "supplier")
@@ -20,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@EntityListeners(AuditingEntityListener.class)
 @Slf4j
 public class Supplier {
 	@Id
@@ -45,9 +49,11 @@ public class Supplier {
 	@Column(name = "status")
 	private Integer status;
 
+	@CreatedDate
 	@Column(name = "created_at")
 	private Date createdAt;
 
+	@LastModifiedDate
 	@Column(name = "updated_at")
 	private Date updatedAt;
 	

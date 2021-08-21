@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AlertRepository extends JpaRepository<Alert , Long > {
 
-    Page<Alert> findAll(Pageable pageable);
+    Page<Alert> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
     Long countByIsChecked(Integer isChecked);
 }

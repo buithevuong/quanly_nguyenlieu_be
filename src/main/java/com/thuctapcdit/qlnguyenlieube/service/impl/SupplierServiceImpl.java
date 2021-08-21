@@ -1,14 +1,11 @@
 package com.thuctapcdit.qlnguyenlieube.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.thuctapcdit.qlnguyenlieube.dao.SupplierRepository;
 import com.thuctapcdit.qlnguyenlieube.dao.UserRepo;
-import com.thuctapcdit.qlnguyenlieube.dto.ProductDto;
 import com.thuctapcdit.qlnguyenlieube.dto.SupplierDto;
 import com.thuctapcdit.qlnguyenlieube.exception.NotFoundException;
-import com.thuctapcdit.qlnguyenlieube.model.Material;
-import com.thuctapcdit.qlnguyenlieube.model.Product;
 import com.thuctapcdit.qlnguyenlieube.model.Supplier;
+import com.thuctapcdit.qlnguyenlieube.model.User;
 import com.thuctapcdit.qlnguyenlieube.service.SupplierService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,34 +36,59 @@ public class SupplierServiceImpl implements SupplierService {
         Page<Supplier> list = supplierRepo.findAll(pageable);
 
         return list.stream().map(item -> {
-            SupplierDto dto = modelMapper.map(item , SupplierDto.class);
+            SupplierDto dto = modelMapper.map(item, SupplierDto.class);
             return dto;
         }).collect(Collectors.toList());
 
     }
 
     @Override
-    public List<SupplierDto> searchSupplier(Integer page, Integer size, String name , String phone, String email) {
+    public List<SupplierDto> searchSupplier(Integer page,
+                                            Integer size,
+                                            String name,
+                                            String phone,
+                                            String email,
+                                            Integer status) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Supplier> list = supplierRepo
-                .findByNameLikeAndPhoneLikeAndEmailLike("%"+name+"%" , "%"+phone+"%" , "%"+email+"%" ,pageable);
+        Page<Supplier> list;
+        if (status == null) {
+            list = supplierRepo
+                    .findByNameLikeAndPhoneLikeAndEmailLikeOrderByUpdatedAtDesc(
+                            "%" + name + "%",
+                            "%" + phone + "%",
+                            "%" + email + "%",
+                            pageable);
 
+        } else {
+            list = supplierRepo
+                    .findByNameLikeAndPhoneLikeAndEmailLikeAndStatusOrderByUpdatedAtDesc(
+                            "%" + name + "%",
+                            "%" + phone + "%",
+                            "%" + email + "%",
+                            status,
+                            pageable);
+
+        }
         return list.stream().map(item -> {
-            SupplierDto dto = modelMapper.map(item , SupplierDto.class);
+            SupplierDto dto = modelMapper.map(item, SupplierDto.class);
             return dto;
         }).collect(Collectors.toList());
     }
 
     @Override
-    public SupplierDto createSupplier(SupplierDto supplierDto) throws JsonProcessingException {
-        Supplier supplier = modelMapper.map(supplierDto , Supplier.class);
-
-        return modelMapper.map(supplierRepo.save(supplier) , SupplierDto.class);
+    @Transactional
+    public SupplierDto createSupplier(SupplierDto supplierDto) {
+        Supplier supplier = modelMapper.map(supplierDto, Supplier.class);
+        supplier.setStatus(1);
+        User user = userRepo.findById(1L).get();
+        supplier.setUser(user);
+        return modelMapper.map(supplierRepo.save(supplier), SupplierDto.class);
     }
 
     @Override
-    public SupplierDto editSupplier(SupplierDto supplierDto) throws JsonProcessingException {
-        Supplier supplier = supplierRepo.findById(supplierDto.getId()).orElseThrow(()-> {
+    @Transactional
+    public SupplierDto editSupplier(SupplierDto supplierDto) {
+        Supplier supplier = supplierRepo.findById(supplierDto.getId()).orElseThrow(() -> {
             throw new NotFoundException("Not found Supplier");
         });
 
@@ -76,7 +99,7 @@ public class SupplierServiceImpl implements SupplierService {
         supplier.setStatus(supplierDto.getStatus());
         supplier.setPhone(supplierDto.getPhone());
 
-        return modelMapper.map(supplierRepo.save(supplier) , SupplierDto.class);
+        return modelMapper.map(supplierRepo.save(supplier), SupplierDto.class);
     }
 
     @Override

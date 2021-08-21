@@ -13,7 +13,7 @@ import javax.validation.constraints.Min;
 
 @RestController
 @RequestMapping("v1/product")
-@CrossOrigin(origins = "http://localhost:3000/")
+@CrossOrigin("*")
 public class ProductController {
 
     @Autowired
@@ -22,27 +22,28 @@ public class ProductController {
     @GetMapping("/search")
     public ResponseEntity<?> getProductsByName(@RequestParam("page") @Min(0) Integer page,
                                                 @RequestParam("size") @Min(1) @Max(10) Integer size,
-                                                @RequestParam("name") String name) {
-        System.out.println(name);
-        return ResponseEntity.ok().body(productService.getProductsByName(page, size, name));
+                                                @RequestParam("name") String name,
+                                               @RequestParam(value = "status" , required = false) Integer status) {
+        return ResponseEntity.ok().body(productService.getProductsByName(page, size, name , status));
     }
 
     @PostMapping( value = "")
     public ResponseEntity<?> addProduct(@ModelAttribute @Valid ProductDto productDto ) throws JsonProcessingException {
-
-        System.out.println(productDto);
         return ResponseEntity.ok().body(productService.createProduct(productDto));
     }
 
     @PutMapping(value = "")
     public ResponseEntity<?> editProduct(@ModelAttribute @Valid ProductDto productDto) throws JsonProcessingException {
-
-        System.out.println(productDto);
         return ResponseEntity.ok().body(productService.editProduct(productDto));
     }
 
     @PutMapping("/remove")
-    public ResponseEntity<?> removeProduct(@RequestParam("id") Integer id) {
-        return ResponseEntity.ok().body(productService.removeProduct(id.longValue()));
+    public ResponseEntity<?> removeProduct(@RequestParam("id") Long id) {
+        return ResponseEntity.ok().body(productService.removeProduct(id));
+    }
+
+    @PutMapping("/pause")
+    public ResponseEntity<?> pauseProduct(@RequestParam("id") Long id) {
+        return ResponseEntity.ok().body(productService.pauseProduct(id));
     }
 }

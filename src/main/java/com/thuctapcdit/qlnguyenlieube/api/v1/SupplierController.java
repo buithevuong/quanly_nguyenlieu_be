@@ -13,7 +13,7 @@ import javax.validation.constraints.Min;
 
 @RestController
 @RequestMapping("v1/supplier")
-@CrossOrigin(origins = "*")
+@CrossOrigin("*")
 public class SupplierController {
 
     @Autowired
@@ -31,11 +31,12 @@ public class SupplierController {
                                                 @RequestParam("size") @Min(1) @Max(10) Integer size,
                                                 @RequestParam("name") String name,
                                                 @RequestParam("phone") String phone,
-                                                @RequestParam("email") String email) {
+                                                @RequestParam("email") String email,
+                                                @RequestParam(value = "status" , required = false) Integer status) {
 
 
 
-        return ResponseEntity.ok().body(supplierService.searchSupplier(page, size, name, phone , email));
+        return ResponseEntity.ok().body(supplierService.searchSupplier(page, size, name, phone , email , status));
     }
 
     @PostMapping( value = "")

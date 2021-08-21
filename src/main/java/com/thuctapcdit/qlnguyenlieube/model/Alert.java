@@ -11,6 +11,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "alert")
@@ -19,6 +21,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @JsonInclude(Include.NON_NULL)
+@EntityListeners(AuditingEntityListener.class)
 public class Alert {
 	@Id
 	@Column(name = "id")
@@ -33,7 +36,8 @@ public class Alert {
 	
 	@Column(name = "color")
 	private String color;
-	
+
+	@CreatedDate
 	@Column(name = "created_at")
 	private Date createdAt;
 

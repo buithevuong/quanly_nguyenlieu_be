@@ -3,14 +3,7 @@ package com.thuctapcdit.qlnguyenlieube.model;
 import java.util.Date;
 import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -19,6 +12,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "warning_threshold")
@@ -27,6 +23,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @JsonInclude(Include.NON_NULL)
+@EntityListeners(AuditingEntityListener.class)
 public class WarningThreshold {
 	@Id
 	@Column(name = "id")
@@ -41,10 +38,12 @@ public class WarningThreshold {
 	
 	@Column(name = "color")
 	private String color;
-	
+
+	@CreatedDate
 	@Column(name = "created_at")
 	private Date createdAt;
-	
+
+	@LastModifiedDate
 	@Column(name = "updated_at")
 	private Date updatedAt;
 	
