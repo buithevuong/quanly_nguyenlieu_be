@@ -3,6 +3,8 @@ package com.thuctapcdit.qlnguyenlieube.api.v1;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.thuctapcdit.qlnguyenlieube.dto.SupplierDto;
 import com.thuctapcdit.qlnguyenlieube.service.SupplierService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,8 @@ import javax.validation.constraints.Min;
 @RequestMapping("v1/supplier")
 @CrossOrigin("*")
 public class SupplierController {
+
+    private static final Logger logger = LogManager.getLogger(SupplierController.class);
 
     @Autowired
     private SupplierService supplierService;
@@ -34,27 +38,31 @@ public class SupplierController {
                                                 @RequestParam("email") String email,
                                                 @RequestParam(value = "status" , required = false) Integer status) {
 
-
-
         return ResponseEntity.ok().body(supplierService.searchSupplier(page, size, name, phone , email , status));
     }
 
     @PostMapping( value = "")
-    public ResponseEntity<?> addSupplier(@ModelAttribute @Valid SupplierDto supplierDto ) throws JsonProcessingException {
+    public ResponseEntity<?> addSupplier(@ModelAttribute @Valid SupplierDto supplierDto ,
+                                         @RequestHeader Long userId) throws JsonProcessingException {
 
-        System.out.println(supplierDto);
-        return ResponseEntity.ok().body(supplierService.createSupplier(supplierDto));
+        logger.info("request add supplier {} by user {}", supplierDto.getName(), userId);
+
+        return ResponseEntity.ok().body(supplierService.createSupplier(supplierDto , userId));
     }
 
     @PutMapping(value = "")
-    public ResponseEntity<?> editSupplier(@ModelAttribute @Valid SupplierDto supplierDto) throws JsonProcessingException {
+    public ResponseEntity<?> editSupplier(@ModelAttribute @Valid SupplierDto supplierDto,
+                                          @RequestHeader Long userId) throws JsonProcessingException {
 
-        System.out.println(supplierDto);
-        return ResponseEntity.ok().body(supplierService.editSupplier(supplierDto));
+        logger.info("request edit supplier {} by user {}", supplierDto.getName(), userId);
+        return ResponseEntity.ok().body(supplierService.editSupplier(supplierDto , userId));
     }
 
     @PutMapping("/remove")
-    public ResponseEntity<?> removeSupplier(@RequestParam("id") Integer id) {
-        return ResponseEntity.ok().body(supplierService.removeSupplier(id.longValue()));
+    public ResponseEntity<?> removeSupplier(@RequestParam("id") Integer id,
+                                            @RequestHeader Long userId) {
+
+        logger.info("request remove supplier {} by user {}", id, userId);
+        return ResponseEntity.ok().body(supplierService.removeSupplier(id.longValue() , userId));
     }
 }

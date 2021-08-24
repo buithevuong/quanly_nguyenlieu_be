@@ -36,30 +36,31 @@ public class MaterialController {
                                                 @RequestParam("name") String name,
                                                 @RequestParam("type") String type,
                                                 @RequestParam(value = "status" , required = false) Integer status) {
-        System.out.println(status);
-        logger.info("request search by name: {} and type: {}", name, type);
 
         return ResponseEntity.ok()
                 .body(materialService.getMaterialsByName(page, size, name, type , status));
     }
 
     @PostMapping(value = "")
-    public ResponseEntity<?> addMaterial(@ModelAttribute @Valid MaterialDto materialDto) throws JsonProcessingException {
+    public ResponseEntity<?> addMaterial(@ModelAttribute @Valid MaterialDto materialDto ,
+                                         @RequestHeader Long userId) throws JsonProcessingException {
         System.out.println(materialDto);
-        logger.info("add material {} ", materialDto.getName());
-        return ResponseEntity.ok().body(materialService.createMaterial(materialDto));
+        logger.info("add material {} by user id = {} ", materialDto.getName() , userId);
+        return ResponseEntity.ok().body(materialService.createMaterial(materialDto , userId));
     }
 
     @PutMapping(value = "")
-    public ResponseEntity<?> editMaterial(@ModelAttribute @Valid MaterialDto materialDto) throws JsonProcessingException {
+    public ResponseEntity<?> editMaterial(@ModelAttribute @Valid MaterialDto materialDto,
+                                          @RequestHeader Long userId) throws JsonProcessingException {
 
-        logger.info("edit material {} - {} ", materialDto.getId(), materialDto.getName());
-        return ResponseEntity.ok().body(materialService.editMaterial(materialDto));
+        logger.info("edit material {} by {} ", materialDto.getId() , userId);
+        return ResponseEntity.ok().body(materialService.editMaterial(materialDto , userId));
     }
 
     @PutMapping("/remove")
-    public ResponseEntity<?> removeMaterial(@RequestParam("id") Integer id) {
-        logger.info("remove material {} ", id);
-        return ResponseEntity.ok().body(materialService.removeMaterial(id.longValue()));
+    public ResponseEntity<?> removeMaterial(@RequestParam("id") Integer id,
+                                            @RequestHeader Long userId) {
+        logger.info("remove material {} by userId = {} ", id , userId);
+        return ResponseEntity.ok().body(materialService.removeMaterial(id.longValue(),userId));
     }
 }

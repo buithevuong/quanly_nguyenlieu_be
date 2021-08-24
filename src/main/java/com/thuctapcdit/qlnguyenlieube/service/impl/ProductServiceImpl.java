@@ -73,7 +73,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public ProductDto createProduct(ProductDto productDto) throws JsonProcessingException {
+    public ProductDto createProduct(ProductDto productDto, Long userId) throws JsonProcessingException {
         List list = objectMapper.readValue(productDto.getMaterialsJSON() , List.class);
 
        // String fileName = fileStorageService.storeFile(productDto.getFile() , false);
@@ -81,7 +81,7 @@ public class ProductServiceImpl implements ProductService {
         Product product = modelMapper.map(productDto , Product.class);
         product.setStatus(1);
         //product.setImage(fileName);
-        User user = userRepo.getById((long) 1);
+        User user = userRepo.getById(userId);
         product.setUser(user);
 
         List<Map<String , Object>> listMaterialDto = new ArrayList<>();
@@ -129,7 +129,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public ProductDto editProduct(ProductDto productDto) throws JsonProcessingException {
+    public ProductDto editProduct(ProductDto productDto, Long userId) throws JsonProcessingException {
         List list = objectMapper.readValue(productDto.getMaterialsJSON() , List.class);
 
         Product product = productRepository.findById(productDto.getId()).orElseThrow(() -> {
@@ -144,7 +144,7 @@ public class ProductServiceImpl implements ProductService {
 //            product.setImage(fileName);
 //        }
 
-        User user = userRepo.getById((long) 1);
+        User user = userRepo.getById(userId);
         product.setUser(user);
 
         List<Map<String , Object>> listMaterialDto = new ArrayList<>();
@@ -171,19 +171,22 @@ public class ProductServiceImpl implements ProductService {
             Optional<ProductMaterial> checkPm = pmRepo.findByProductAndMaterial(response , m);
 
             if(checkPm.isEmpty() && amountMate < m.getCurrentAmount()){
+                m.setCurrentAmount(m.getCurrentAmount()-amountMate);
+                materialRepo.save(m);
+
                 ProductMaterial ms = ProductMaterial.builder()
                         .product(response)
                         .material(m)
                         .amountMaterial(amountMate)
                         .build();
                 pmRepo.save(ms);
-                m.setCurrentAmount(m.getCurrentAmount()-amountMate);
-                materialRepo.save(m);
+
             } else if(checkPm.isPresent() && amountMate < m.getCurrentAmount() + checkPm.get().getAmountMaterial()){
-                checkPm.get().setAmountMaterial(amountMate);
-                pmRepo.save(checkPm.get());
                 m.setCurrentAmount(m.getCurrentAmount()-(amountMate - checkPm.get().getAmountMaterial()));
                 materialRepo.save(m);
+
+                checkPm.get().setAmountMaterial(amountMate);
+                pmRepo.save(checkPm.get());
 
                 alertService.sendEmailAndNoti(user.getEmail() , m);
             } else {
@@ -196,7 +199,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDto removeProduct(Long id) {
+    public ProductDto removeProduct(Long id, Long userId) {
         Product product = productRepository.findById(id).orElseThrow(() -> {
                     throw new NotFoundException("Not found Product By Id");
                 }
@@ -206,7 +209,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDto pauseProduct(Long id) {
+    public ProductDto pauseProduct(Long id, Long userId) {
         Product product = productRepository.findById(id).orElseThrow(() -> {
                     throw new NotFoundException("Not found Product By Id");
                 }

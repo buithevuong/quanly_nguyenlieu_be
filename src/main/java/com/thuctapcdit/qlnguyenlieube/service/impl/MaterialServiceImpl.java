@@ -79,7 +79,7 @@ public class MaterialServiceImpl implements MaterialService {
 
     @Override
     @Transactional
-    public MaterialDto createMaterial(MaterialDto materialDto) throws JsonProcessingException {
+    public MaterialDto createMaterial(MaterialDto materialDto, Long userId) throws JsonProcessingException {
 
 
         List list = objectMapper.readValue(materialDto.getSuppliersJSON(), List.class);
@@ -92,7 +92,7 @@ public class MaterialServiceImpl implements MaterialService {
         material.setStatus(1);
         //material.setImage(fileName);
         material.setType(materialDto.getType());
-        User user = userRepo.getById((long) 1);
+        User user = userRepo.getById(userId);
         material.setUser(user);
 
         List<Map<String, Object>> listSupDto = new ArrayList<>();
@@ -145,14 +145,14 @@ public class MaterialServiceImpl implements MaterialService {
 
             mwRepo.save(mw);
         });
-        System.out.println("done add material");
+
         return modelMapper.map(response, MaterialDto.class);
 
     }
 
     @Override
     @Transactional
-    public MaterialDto editMaterial(MaterialDto materialDto) throws JsonProcessingException {
+    public MaterialDto editMaterial(MaterialDto materialDto, Long userId) throws JsonProcessingException {
         List list = objectMapper.readValue(materialDto.getSuppliersJSON(), List.class);
 
         List listWths = objectMapper.readValue(materialDto.getWthsJSON(), List.class);
@@ -168,7 +168,7 @@ public class MaterialServiceImpl implements MaterialService {
         material.setTotal(materialDto.getTotal());
         material.setCurrentAmount(material.getCurrentAmount() + amount);
 
-        User user = userRepo.getById((long) 1);
+        User user = userRepo.getById(userId);
         material.setUser(user);
 
         List<Map<String, Object>> listSupDto = new ArrayList<>();
@@ -256,12 +256,11 @@ public class MaterialServiceImpl implements MaterialService {
             }
         });
 
-        System.out.println("edit done material");
         return modelMapper.map(response, MaterialDto.class);
     }
 
     @Override
-    public MaterialDto removeMaterial(Long id) {
+    public MaterialDto removeMaterial(Long id, Long userId) {
         Material material = materialRepo.findById(id).orElseThrow(() -> {
                     throw new NotFoundException("Not found Material By Id");
                 }

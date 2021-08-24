@@ -1,13 +1,16 @@
 package com.thuctapcdit.qlnguyenlieube.service.impl;
 
+import com.thuctapcdit.qlnguyenlieube.config.RabbitMqConfig;
 import com.thuctapcdit.qlnguyenlieube.dao.AlertRepository;
 import com.thuctapcdit.qlnguyenlieube.dao.MaterialWarningRepo;
 import com.thuctapcdit.qlnguyenlieube.dto.AlertDto;
+import com.thuctapcdit.qlnguyenlieube.dto.MessageEmail;
 import com.thuctapcdit.qlnguyenlieube.model.Alert;
 import com.thuctapcdit.qlnguyenlieube.model.Material;
 import com.thuctapcdit.qlnguyenlieube.model.MaterialWarning;
 import com.thuctapcdit.qlnguyenlieube.service.AlertService;
 import org.modelmapper.ModelMapper;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -37,6 +40,9 @@ public class AlertServiceImpl implements AlertService {
     @Autowired
     private MaterialWarningRepo mwRepo;
 
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
     @Override
     public Map<String , Object> getAllAlert(Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page , size);
@@ -58,11 +64,11 @@ public class AlertServiceImpl implements AlertService {
     }
     @Override
     public void sendEmailAndNoti(String email , Material material){
-        try {
-            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+
             List<MaterialWarning> listMw = mwRepo.findByMaterial(material);
 
             float tile = (material.getCurrentAmount()/material.getTotal())*100;
+
             listMw.forEach(i -> {
                 if(tile < i.getWarningThreshold().getThreshold() ){
 
@@ -76,20 +82,19 @@ public class AlertServiceImpl implements AlertService {
 
                     alertRepository.save(alert);
 
-                    simpleMailMessage.setTo(email);
-                    simpleMailMessage.setSubject(alert.getTitle());
-                    simpleMailMessage.setText(alert.getContent());
+                    MessageEmail messageEmail = MessageEmail.builder()
+                            .email(email)
+                            .title(alert.getTitle())
+                            .content(alert.getContent())
+                            .build();
 
-                    emailSender.send(simpleMailMessage);
+                    rabbitTemplate.convertAndSend(RabbitMqConfig.EXCHANGE1 ,
+                            RabbitMqConfig.ROUTING_KEY1 ,
+                            messageEmail);
 
-                    System.out.println("Email sended to "+ email + " : "+alert.getContent());
                 }
             });
 
-
-        } catch (Exception ex) {
-            throw new InvalidParameterException(ex.getMessage());
-        }
 
     }
 }

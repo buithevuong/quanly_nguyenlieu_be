@@ -77,25 +77,30 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     @Transactional
-    public SupplierDto createSupplier(SupplierDto supplierDto) {
+    public SupplierDto createSupplier(SupplierDto supplierDto,Long userId) {
         Supplier supplier = modelMapper.map(supplierDto, Supplier.class);
         supplier.setStatus(1);
-        User user = userRepo.findById(1L).get();
+        User user = userRepo.findById(userId).orElseThrow(() -> {
+            throw new NotFoundException("Not found user by id " + userId);
+        });
         supplier.setUser(user);
         return modelMapper.map(supplierRepo.save(supplier), SupplierDto.class);
     }
 
     @Override
     @Transactional
-    public SupplierDto editSupplier(SupplierDto supplierDto) {
+    public SupplierDto editSupplier(SupplierDto supplierDto,Long userId) {
         Supplier supplier = supplierRepo.findById(supplierDto.getId()).orElseThrow(() -> {
             throw new NotFoundException("Not found Supplier");
+        });
+        User user = userRepo.findById(userId).orElseThrow(() -> {
+            throw new NotFoundException("Not found user by id " + userId);
         });
 
         supplier.setName(supplierDto.getName());
         supplier.setAddress(supplierDto.getAddress());
         supplier.setEmail(supplierDto.getEmail());
-        supplier.setUser(userRepo.findById(1L).get());
+        supplier.setUser(user);
         supplier.setStatus(supplierDto.getStatus());
         supplier.setPhone(supplierDto.getPhone());
 
@@ -103,7 +108,7 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    public SupplierDto removeSupplier(Long id) {
+    public SupplierDto removeSupplier(Long id,Long userId) {
         Supplier supplier = supplierRepo.findById(id).orElseThrow(() -> {
                     throw new NotFoundException("Not found Supplier By Id");
                 }

@@ -3,6 +3,8 @@ package com.thuctapcdit.qlnguyenlieube.api.v1;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.thuctapcdit.qlnguyenlieube.dto.ProductDto;
 import com.thuctapcdit.qlnguyenlieube.service.ProductService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,8 @@ import javax.validation.constraints.Min;
 @CrossOrigin("*")
 public class ProductController {
 
+    private static final Logger logger = LogManager.getLogger(ProductController.class);
+
     @Autowired
     private ProductService productService;
 
@@ -28,22 +32,30 @@ public class ProductController {
     }
 
     @PostMapping( value = "")
-    public ResponseEntity<?> addProduct(@ModelAttribute @Valid ProductDto productDto ) throws JsonProcessingException {
-        return ResponseEntity.ok().body(productService.createProduct(productDto));
+    public ResponseEntity<?> addProduct(@ModelAttribute @Valid ProductDto productDto ,
+                                        @RequestHeader Long userId) throws JsonProcessingException {
+        logger.info("request add product {} by user {}", productDto.getName(), userId);
+        return ResponseEntity.ok().body(productService.createProduct(productDto , userId));
     }
 
     @PutMapping(value = "")
-    public ResponseEntity<?> editProduct(@ModelAttribute @Valid ProductDto productDto) throws JsonProcessingException {
-        return ResponseEntity.ok().body(productService.editProduct(productDto));
+    public ResponseEntity<?> editProduct(@ModelAttribute @Valid ProductDto productDto,
+                                         @RequestHeader Long userId) throws JsonProcessingException {
+        logger.info("request edit product {} by user {}", productDto.getName(), userId);
+        return ResponseEntity.ok().body(productService.editProduct(productDto , userId));
     }
 
     @PutMapping("/remove")
-    public ResponseEntity<?> removeProduct(@RequestParam("id") Long id) {
-        return ResponseEntity.ok().body(productService.removeProduct(id));
+    public ResponseEntity<?> removeProduct(@RequestParam("id") Long id,
+                                           @RequestHeader Long userId) {
+        logger.info("request remove product {} by user {}", id, userId);
+        return ResponseEntity.ok().body(productService.removeProduct(id , userId));
     }
 
     @PutMapping("/pause")
-    public ResponseEntity<?> pauseProduct(@RequestParam("id") Long id) {
-        return ResponseEntity.ok().body(productService.pauseProduct(id));
+    public ResponseEntity<?> pauseProduct(@RequestParam("id") Long id,
+                                          @RequestHeader Long userId) {
+        logger.info("request pause or resart product {} by user {}", id, userId);
+        return ResponseEntity.ok().body(productService.pauseProduct(id , userId));
     }
 }

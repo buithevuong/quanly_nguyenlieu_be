@@ -13,9 +13,9 @@ public interface MaterialService {
 
 	List<MaterialDto> getMaterialsByName(Integer page , Integer size , String name , String type ,Integer status);
 
-	MaterialDto createMaterial(MaterialDto materialDto ) throws JsonProcessingException;
+	MaterialDto createMaterial(MaterialDto materialDto , Long userId) throws JsonProcessingException;
 
-	MaterialDto editMaterial(MaterialDto materialDto ) throws JsonProcessingException;
+	MaterialDto editMaterial(MaterialDto materialDto , Long userId) throws JsonProcessingException;
 
-	MaterialDto removeMaterial(Long id);
+	MaterialDto removeMaterial(Long id, Long userId);
 }

@@ -9,11 +9,11 @@ public interface ProductService {
 
     List<ProductDto> getProductsByName(Integer page , Integer size , String name , Integer status);
 
-    ProductDto createProduct(ProductDto productDto ) throws JsonProcessingException;
+    ProductDto createProduct(ProductDto productDto , Long userId) throws JsonProcessingException;
 
-    ProductDto editProduct(ProductDto productDto ) throws JsonProcessingException;
+    ProductDto editProduct(ProductDto productDto , Long userId) throws JsonProcessingException;
 
-    ProductDto removeProduct(Long id);
+    ProductDto removeProduct(Long id, Long userId);
 
-    ProductDto pauseProduct(Long id);
+    ProductDto pauseProduct(Long id, Long userId);
 }
