@@ -14,7 +14,6 @@ import com.thuctapcdit.qlnguyenlieube.exception.NotFoundException;
 import com.thuctapcdit.qlnguyenlieube.model.*;
 import com.thuctapcdit.qlnguyenlieube.service.AlertService;
 import com.thuctapcdit.qlnguyenlieube.service.ProductService;
-import com.thuctapcdit.qlnguyenlieube.utils.FileStorageService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -49,8 +48,8 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Autowired
-    private FileStorageService fileStorageService;
+//    @Autowired
+//    private FileStorageService fileStorageService;
 
     @Autowired
     private AlertService alertService;

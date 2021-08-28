@@ -31,12 +31,12 @@ public class SupplierServiceImpl implements SupplierService {
     private UserRepo userRepo;
 
     @Override
-    public List<SupplierDto> getSupplier(Integer page, Integer size) {
+    public List<String> getSupplier(Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Supplier> list = supplierRepo.findAll(pageable);
+        List<Supplier> list = supplierRepo.findAll();
 
         return list.stream().map(item -> {
-            SupplierDto dto = modelMapper.map(item, SupplierDto.class);
+            String dto = item.getName();
             return dto;
         }).collect(Collectors.toList());
 

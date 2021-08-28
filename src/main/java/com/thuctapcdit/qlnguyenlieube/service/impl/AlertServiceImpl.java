@@ -97,4 +97,16 @@ public class AlertServiceImpl implements AlertService {
 
 
     }
+
+    @Override
+    public boolean checkAll() {
+        List<Alert> list = alertRepository.findAllByIsChecked(1);
+
+        list.forEach(i -> {
+            i.setIsChecked(0);
+
+        });
+        alertRepository.saveAll(list);
+        return true;
+    }
 }

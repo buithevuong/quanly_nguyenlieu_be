@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface SupplierService {
 
-    List<SupplierDto> getSupplier(Integer page , Integer size);
+    List<String> getSupplier(Integer page , Integer size);
 
     List<SupplierDto> searchSupplier(Integer page , Integer size , String name , String phone, String email, Integer status);
 

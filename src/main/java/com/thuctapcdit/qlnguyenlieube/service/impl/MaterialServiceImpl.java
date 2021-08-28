@@ -8,7 +8,6 @@ import com.thuctapcdit.qlnguyenlieube.dto.WarningThresholdDto;
 import com.thuctapcdit.qlnguyenlieube.exception.NotFoundException;
 import com.thuctapcdit.qlnguyenlieube.model.*;
 import com.thuctapcdit.qlnguyenlieube.service.MaterialService;
-import com.thuctapcdit.qlnguyenlieube.utils.FileStorageService;
 import com.thuctapcdit.qlnguyenlieube.utils.MethodUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,8 +50,8 @@ public class MaterialServiceImpl implements MaterialService {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Autowired
-    private FileStorageService fileStorageService;
+//    @Autowired
+//    private FileStorageService fileStorageService;
 
     @Override
     public List<MaterialDto> getMaterials(Integer page, Integer size) {

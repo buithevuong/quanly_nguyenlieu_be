@@ -24,10 +24,9 @@ public class SupplierController {
     private SupplierService supplierService;
 
     @GetMapping("")
-    public ResponseEntity<?> getAllSupplier(@RequestParam("page") Integer page,
-                                            @RequestParam("size") Integer size){
+    public ResponseEntity<?> getAllSupplier(){
 
-        return ResponseEntity.ok().body(supplierService.getSupplier(page , size));
+        return ResponseEntity.ok().body(supplierService.getSupplier(1 , 1));
     }
 
     @GetMapping("/search")

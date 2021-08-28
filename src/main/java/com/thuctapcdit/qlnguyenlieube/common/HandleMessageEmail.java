@@ -2,6 +2,7 @@ package com.thuctapcdit.qlnguyenlieube.common;
 
 import com.thuctapcdit.qlnguyenlieube.config.RabbitMqConfig;
 import com.thuctapcdit.qlnguyenlieube.dto.MessageEmail;
+import com.thuctapcdit.qlnguyenlieube.dto.MessageSendPassword;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -37,5 +38,22 @@ public class HandleMessageEmail {
             logger.error(ex.getMessage(), ex);
         }
     }
+
+    @RabbitListener(queues = RabbitMqConfig.QUEUE2)
+    public void getTokenResetPassword(MessageSendPassword messageToken) {
+
+        try {
+            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+
+            simpleMailMessage.setTo(messageToken.getAddress());
+            simpleMailMessage.setSubject("TOKEN RESET PASSWORD");
+            simpleMailMessage.setText("TOKEN RESET PASSWORD is : " + messageToken.getToken());
+
+            emailSender.send(simpleMailMessage);
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+    }
+
 
 }

@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SuccessRestDto {
+    private static final Integer code = 200;
     private String message;
     private Object data;
 
