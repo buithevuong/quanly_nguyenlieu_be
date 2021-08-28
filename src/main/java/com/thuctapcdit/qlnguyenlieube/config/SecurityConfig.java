@@ -43,9 +43,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
-                .authorizeRequests().antMatchers("/" ,
-                "/images/**" ,
-                "/**").permitAll()
+                .authorizeRequests().antMatchers("/authenticate" ,
+                "/registration",
+                "/reset-password",
+                "/change-password",
+                "/images/**").permitAll()
                 .antMatchers("/v1/**").hasRole("ADMIN")
                 .and().exceptionHandling().and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);

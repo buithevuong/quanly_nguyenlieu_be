@@ -14,6 +14,7 @@ import com.thuctapcdit.qlnguyenlieube.exception.NotFoundException;
 import com.thuctapcdit.qlnguyenlieube.model.*;
 import com.thuctapcdit.qlnguyenlieube.service.AlertService;
 import com.thuctapcdit.qlnguyenlieube.service.ProductService;
+import com.thuctapcdit.qlnguyenlieube.utils.MethodUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -156,7 +157,7 @@ public class ProductServiceImpl implements ProductService {
 
         Product response = productRepository.save(product);
 
-
+        List<Long> listAvailable = new ArrayList<>();
 
         listMaterialDto.forEach(i -> {
 
@@ -178,15 +179,16 @@ public class ProductServiceImpl implements ProductService {
                         .material(m)
                         .amountMaterial(amountMate)
                         .build();
-                pmRepo.save(ms);
+
+
+                listAvailable.add(pmRepo.save(ms).getId());
 
             } else if(checkPm.isPresent() && amountMate < m.getCurrentAmount() + checkPm.get().getAmountMaterial()){
                 m.setCurrentAmount(m.getCurrentAmount()-(amountMate - checkPm.get().getAmountMaterial()));
                 materialRepo.save(m);
 
                 checkPm.get().setAmountMaterial(amountMate);
-                pmRepo.save(checkPm.get());
-
+                listAvailable.add(pmRepo.save(checkPm.get()).getId());
                 alertService.sendEmailAndNoti(user.getEmail() , m);
             } else {
                 throw new InvalidParameterException("Số lượng nguyên liệu không hợp lệ");
@@ -194,6 +196,18 @@ public class ProductServiceImpl implements ProductService {
 
         });
 
+        //delete ms else
+        List<ProductMaterial> listPm = pmRepo.findByProduct(response);
+
+        listPm.forEach(i -> listAvailable.forEach(j -> {
+            if (!i.getId().equals(j) && !MethodUtils.checkIndexInArray(i.getId(), listAvailable)) {
+
+                pmRepo.deleteById(i.getId());
+
+                i.getMaterial().setCurrentAmount(i.getMaterial().getCurrentAmount() + i.getAmountMaterial());
+            }
+        }));
+        System.out.println("done edit");
         return modelMapper.map(response , ProductDto.class);
     }
 

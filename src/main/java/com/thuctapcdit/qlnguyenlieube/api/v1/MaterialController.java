@@ -25,14 +25,14 @@ public class MaterialController {
 
     @GetMapping("")
     public ResponseEntity<?> getMaterials(@RequestParam("page") @Min(0) Integer page,
-                                          @RequestParam("size") @Min(1) @Max(10) Integer size) {
+                                          @RequestParam("size") @Min(1) @Max(50) Integer size) {
 
         return ResponseEntity.ok().body(materialService.getMaterials(page, size));
     }
 
     @GetMapping("/search")
     public ResponseEntity<?> getMaterialsByName(@RequestParam("page") @Min(0) Integer page,
-                                                @RequestParam("size") @Min(1) @Max(10) Integer size,
+                                                @RequestParam("size") @Min(1) @Max(50) Integer size,
                                                 @RequestParam("name") String name,
                                                 @RequestParam("type") String type,
                                                 @RequestParam(value = "status" , required = false) Integer status) {

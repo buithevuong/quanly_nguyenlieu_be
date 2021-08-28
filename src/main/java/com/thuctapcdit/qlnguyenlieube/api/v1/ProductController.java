@@ -25,7 +25,7 @@ public class ProductController {
 
     @GetMapping("/search")
     public ResponseEntity<?> getProductsByName(@RequestParam("page") @Min(0) Integer page,
-                                                @RequestParam("size") @Min(1) @Max(10) Integer size,
+                                                @RequestParam("size") @Min(1) @Max(50) Integer size,
                                                 @RequestParam("name") String name,
                                                @RequestParam(value = "status" , required = false) Integer status) {
         return ResponseEntity.ok().body(productService.getProductsByName(page, size, name , status));

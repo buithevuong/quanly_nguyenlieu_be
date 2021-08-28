@@ -24,14 +24,15 @@ public class SupplierController {
     private SupplierService supplierService;
 
     @GetMapping("")
-    public ResponseEntity<?> getAllSupplier(){
+    public ResponseEntity<?> getAllSupplier(@RequestParam("page") @Min(1) Integer page,
+                                            @RequestParam("size") @Min(1)  Integer size){
 
-        return ResponseEntity.ok().body(supplierService.getSupplier(1 , 1));
+        return ResponseEntity.ok().body(supplierService.getSupplier(page , size));
     }
 
     @GetMapping("/search")
     public ResponseEntity<?> getSuppliersByName(@RequestParam("page") @Min(1) Integer page,
-                                                @RequestParam("size") @Min(1) @Max(10) Integer size,
+                                                @RequestParam("size") @Min(1) @Max(50) Integer size,
                                                 @RequestParam("name") String name,
                                                 @RequestParam("phone") String phone,
                                                 @RequestParam("email") String email,
